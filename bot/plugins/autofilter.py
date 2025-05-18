@@ -39,7 +39,7 @@ IMDB_TEMPLATE_TXT = config_dict['IMDB_TEMPLATE_TXT']
 ALRT_TXT = config_dict['ALRT_TXT']
 OLD_ALRT_TXT = config_dict['OLD_ALRT_TXT']
 MAX_LIST_ELM = config_dict['MAX_LIST_ELM']
-iron_qualities = ["360p", "480p", "720p", "1080p", "1440p", "2160p"]
+iron_qualities = ["240p", "360p", "480p", "540p", "576p", "720p", "1080p", "1440p", "2160p"]
 iron_languages = ["Hindi", "English", "Gujarati", "Tamil", "Telugu", 'Marathi', 'Malayalam', "Punjabi", "Bengali", "Kannada","German", "Chinese", "Japanese", 'Spanish']
 iron_seasons = ['S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08', 'S09', 'S10']
 iron_episodes = [f"E{i:02}" for i in range(1, 41)]
@@ -196,7 +196,7 @@ async def auto_filter(client, msg, spoll=False):
             search = search.lower()
             find = search.split("ᴡᴀɪᴛ ʙʀᴏ..")
             search = ""
-            removes = ["in", "upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
+            removes = ["in", "upload", "series", "full", "horror", "thriller", "mystery", "print", "file", "movie"]
             for x in find:
                 if x in removes:
                     continue

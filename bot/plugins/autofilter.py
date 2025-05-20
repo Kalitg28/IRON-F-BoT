@@ -10,7 +10,7 @@ from pyrogram.errors import FloodWait, UserIsBlocked, MessageNotModified, PeerId
 from bot.helper.telegram_helper.button_build import ButtonMaker
 from bot.database.db_utils import get_search_results, get_size, get_file_details
 from bot.database.db_handler import DbManager
-from bot import LOGGER as logger, bot, config_dict, bot_name, handler_dict, user_data, broadcast_handler_dict, deldbfiles_handler_dict
+from bot import LOGGER as logger, bot, config_dict, bot_name, handler_dict, user_data, broadcast_handler_dict, deldbfiles_handler_dict, text_result_handler
 from bot.helper.extra.bot_utils import list_to_str, get_readable_time
 from bot.helper.telegram_helper.message_utils import forcesub, BotPm_check, send_message, editReplyMarkup, edit_message, delete_message, auto_delete_incoming_user_message, auto_delete_filter_result_message, convert_seconds_to_minutes, emoji_react
 from bot.plugins.broadcast import update_broadcast_variable
@@ -39,7 +39,7 @@ IMDB_TEMPLATE_TXT = config_dict['IMDB_TEMPLATE_TXT']
 ALRT_TXT = config_dict['ALRT_TXT']
 OLD_ALRT_TXT = config_dict['OLD_ALRT_TXT']
 MAX_LIST_ELM = config_dict['MAX_LIST_ELM']
-iron_qualities = ["240p", "360p", "480p", "540p", "576p", "720p", "1080p", "1440p", "2160p"]
+iron_qualities = ["360p", "480p", "720p", "1080p", "1440p", "2160p"]
 iron_languages = ["Hindi", "English", "Gujarati", "Tamil", "Telugu", 'Marathi', 'Malayalam', "Punjabi", "Bengali", "Kannada","German", "Chinese", "Japanese", 'Spanish']
 iron_seasons = ['S01', 'S02', 'S03', 'S04', 'S05', 'S06', 'S07', 'S08', 'S09', 'S10']
 iron_episodes = [f"E{i:02}" for i in range(1, 41)]
@@ -95,6 +95,17 @@ async def get_poster(query, bulk=False, id=False, file=None):
     if plot and len(plot) > 800:
         plot = plot[0:800] + "..."
 
+    # Try to get a landscape poster if available, else fallback to full-size cover url
+    poster_url = None
+    if "images" in movie and isinstance(movie["images"], dict):
+        # Try to find a landscape image in the images dict
+        for img in movie["images"].get("backdrops", []):
+            if img.get("aspect_ratio", 0) > 1.5 and img.get("url"):
+                poster_url = img["url"]
+                break
+    if not poster_url:
+        poster_url = movie.get('full-size cover url')
+
     return {
         'title': movie.get('title'),
         'votes': movie.get('votes'),
@@ -110,19 +121,19 @@ async def get_poster(query, bulk=False, id=False, file=None):
         "certificates": list_to_str(movie.get("certificates")),
         "languages": list_to_str(movie.get("languages")),
         "director": list_to_str(movie.get("director")),
-        "writer":list_to_str(movie.get("writer")),
-        "producer":list_to_str(movie.get("producer")),
-        "composer":list_to_str(movie.get("composer")) ,
-        "cinematographer":list_to_str(movie.get("cinematographer")),
+        "writer": list_to_str(movie.get("writer")),
+        "producer": list_to_str(movie.get("producer")),
+        "composer": list_to_str(movie.get("composer")),
+        "cinematographer": list_to_str(movie.get("cinematographer")),
         "music_team": list_to_str(movie.get("music department")),
         "distributors": list_to_str(movie.get("distributors")),
         'release_date': date,
         'year': movie.get('year'),
         'genres': list_to_str(movie.get("genres")),
-        'poster': movie.get('full-size cover url'),
+        'poster': poster_url,
         'plot': plot,
         'rating': str(movie.get("rating")),
-        'url':f'https://www.imdb.com/title/tt{movieid}'
+        'url': f'https://www.imdb.com/title/tt{movieid}'
     }
 # https://github.com/odysseusmax/animated-lamp/blob/2ef4730eb2b5f0596ed6d03e7b05243d93e3415b/bot/utils/broadcast.py#L37
 
@@ -196,16 +207,16 @@ async def auto_filter(client, msg, spoll=False):
             search = search.lower()
             find = search.split("ᴡᴀɪᴛ ʙʀᴏ..")
             search = ""
-            removes = ["in", "upload", "series", "full", "horror", "thriller", "mystery", "print", "file", "movie"]
+            removes = ["in", "upload", "series", "full", "horror", "thriller", "mystery", "print", "file"]
             for x in find:
                 if x in removes:
                     continue
                 else:
                     search += x + " "
             search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
-            search = re.sub(r"\s+", " ", search).strip()
-            search = search.replace("-", " ")
-            search = search.replace(":", "")
+            search = re.sub(r"@\w+|(_|\-|\.|\+|\#|\$|%|\^|&|\*|\(|\)|!|~|`|,|;|:|\"|\'|\?|/|<|>|\[|\]|\{|\}|=|\||\\)", " ", str(search))
+            search = re.sub(r"\s+", " ", search)
+            print(search)
 
             # Removed message.chat.id
             try:
@@ -257,6 +268,7 @@ async def auto_filter(client, msg, spoll=False):
     key = f"{message.chat.id}-{message.id}"
     FRESH[key] = search
     GETALL[key] = files
+    results_files = []
     req = message.from_user.id if message.from_user else 0
     # Initialize ButtonMaker
 
@@ -269,13 +281,22 @@ async def auto_filter(client, msg, spoll=False):
     current_page = 1  # Default to page 1
     button_maker.callback("🕵 ꜰɪʟᴛᴇʀɪɴɢ ᴅᴀᴛᴀ 🕵", f"fd#page#{key}#{current_page}#{req}", position="body")
 
-    # Creating buttons for each file
-    for file in files:
-        button_maker.callback(
-            text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
-            callback_data=f'{pre}#{file.file_id}#{req}',
-            position="files"
-        )
+    if config_dict['RESULT_TYPE'] == 'BUTTON':
+        # Creating buttons for each file
+        for file in files:
+            button_maker.callback(
+                text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
+                callback_data=f'{pre}#{file.file_id}#{req}',
+                position="files"
+            )
+    elif config_dict['RESULT_TYPE'] == 'TEXT':
+        results_files = []
+        i = 1
+        for file in files:
+            ifile = f"{i}. [{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}"
+            mfile = f"<a href='https://t.me/{bot_name}?start={pre}_{file.file_id}'>{ifile}</a>"
+            results_files.append(mfile)
+            i += 1
 
     # Page navigation buttons
     if total_results > 0:
@@ -350,24 +371,26 @@ async def auto_filter(client, msg, spoll=False):
         else:
             cap = f"<b>• Title: <code>{search}</code>\n• Total Files: <code>{total_results}</code>\n• Requested By: {message.from_user.mention}\n• Result in: <code>{remaining_seconds} Seconds</code>\n</b>"
 
+        if config_dict['RESULT_TYPE'] == 'TEXT':
+            text_result_handler[key] = cap 
         if imdb and imdb.get('poster'):
             try:
                 iron_msg = await send_message(
                     message,
-                    text=cap,
+                    text=cap if not results_files else cap + '\n\n' + '\n\n'.join(results_files),
                     buttons=keyboard,
                     photo=imdb.get('poster')
                 )
             except Exception:
                 iron_msg = await send_message(
                     message,
-                    text=cap,
+                    text=cap if not results_files else cap + '\n\n' + '\n\n'.join(results_files),
                     buttons=keyboard
                 )
         else:
             iron_msg = await send_message(
                 message,
-                text=cap,
+                text=cap if not results_files else cap + '\n\n' + '\n\n'.join(results_files),
                 buttons=keyboard
             )
     else:
@@ -379,9 +402,11 @@ async def auto_filter(client, msg, spoll=False):
             user_mention = f"@{message.from_user.username}" if message else '',
             query_total_results = total_results if total_results else ''
         )
+        if config_dict['RESULT_TYPE'] == 'TEXT':
+            text_result_handler[key] = text
         iron_msg = await send_message(
             message,
-            text=text,
+            text=text if not results_files else text + '\n\n' + '\n\n'.join(results_files),
             buttons=keyboard
         )
     try:
@@ -392,6 +417,7 @@ async def auto_filter(client, msg, spoll=False):
         del BUTTONS[key]
         del GETALL[key]
         del FRESH[key]
+        del text_result_handler[key]
     except Exception as e:
         logger.error(f"Error occuer while delete message in auto filter: {e}")
         pass
@@ -403,12 +429,8 @@ async def advantage_spell_chok(client, msg):
     reqstr_id = msg.from_user.id if msg.from_user else 0
     reqstr = await client.get_users(reqstr_id)
     key = f"{msg.chat.id}-{msg.id}"
-    # Clean up the search query
-    query = re.sub(
-        r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|br((o|u)h?)*|^h(e|a)?(l)*(o)*|mal(ayalam)?|t(h)?amil|file|that|find|und(o)*|kit(t(i|y)?)?o(w)?|thar(u)?(o)*w?|kittum(o)*|aya(k)*(um(o)*)?|full\smovie|any(one)|with\ssubtitle(s)?)",
-        "", mv_rqst, flags=re.IGNORECASE
-    )
-    query = query.strip()
+
+    query = mv_rqst.strip()
 
     try:
         # Attempt to fetch movies from poster service
@@ -498,11 +520,8 @@ async def advantage_spoll_choker(bot, query):
         return await query.answer(config_dict['OLD_ALRT_TXT'], show_alert=True)
 
     movie = movies[int(movie_)]
-    movie = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|with\ssubtitle(s)?)", "", movie, flags=re.IGNORECASE)
-    movie = re.sub(r"\s+", " ", movie).strip()
-    movie = movie.replace("-", " ")
-    movie = movie.replace(":", "")
-    movie = re.sub(r'\s+', ' ', movie)
+    movie = re.sub(r"@\w+|(_|\-|\.|\+|\#|\$|%|\^|&|\*|\(|\)|!|~|`|,|;|:|\"|\'|\?|/|<|>|\[|\]|\{|\}|=|\||\\)", " ", str(movie))
+    movie = re.sub(r"\s+", " ", movie)
     movie = movie.strip()
     await query.answer(config_dict['CHK_MOV_ALRT'])
 
@@ -575,7 +594,7 @@ async def next_page(bot, query: CallbackQuery):
     user_language = user_data[user_id]['LANGUAGE'] if 'LANGUAGE' in user_data[user_id] else None
     user_quality = user_data[user_id]['QUALITY'] if 'QUALITY' in user_data[user_id]  else None
     user_file_type = user_data[user_id]['FILE_TYPE'] if 'FILE_TYPE' in user_data[user_id]  else None
-
+    results_files = []
     files, n_offset, total = await get_search_results(query.message.chat.id, search, file_type=user_file_type, file_language=user_language, file_quality=user_quality, offset=offset, filter=True)
     try:
         n_offset = int(n_offset)
@@ -598,12 +617,22 @@ async def next_page(bot, query: CallbackQuery):
     button_maker.callback("🕵 ꜰɪʟᴛᴇʀɪɴɢ ᴅᴀᴛᴀ 🕵", f"fd#page#{key}#{math.ceil(int(offset)/10)+1}#{req}", position="body")
 
     # Dynamically adding file-related buttons
-    for file in files:
-        button_maker.callback(
-            text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
-            callback_data=f'{pre}#{file.file_id}#{req}',
-            position="files"
-        )
+    if config_dict['RESULT_TYPE'] == 'BUTTON':
+        # Creating buttons for each file
+        for file in files:
+            button_maker.callback(
+                text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
+                callback_data=f'{pre}#{file.file_id}#{req}',
+                position="files"
+            )
+    elif config_dict['RESULT_TYPE'] == 'TEXT':
+        results_files = []
+        i = 1 if offset == 0 else offset + 1
+        for file in files:
+            ifile = f"{i}. [{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}"
+            mfile = f"<a href='https://t.me/{bot_name}?start={pre}_{file.file_id}'>{ifile}</a>"
+            results_files.append(mfile)
+            i += 1
 
     # Page navigation buttons
     if 0 < offset <= 10:
@@ -631,10 +660,17 @@ async def next_page(bot, query: CallbackQuery):
         button_maker.callback(f"ɴᴇxᴛ ⇛", f"next_{req}_{key}_{n_offset}", position="footer")
 
     try:
-        await editReplyMarkup(
-            query.message,
-            reply_markup=button_maker.build_filter_menu()
-        )
+        if not results_files and config_dict['RESULT_TYPE'] == 'BUTTON':
+            await editReplyMarkup(
+                query.message,
+                reply_markup=button_maker.build_filter_menu()
+            )
+        elif results_files and config_dict['RESULT_TYPE'] == 'TEXT':
+            await edit_message(
+                query.message,
+                text=text_result_handler[key] + '\n\n' + '\n\n'.join(results_files) if key in text_result_handler else 'Here are your results' + '\n\n' + '\n\n'.join(results_files),
+                buttons=button_maker.build_filter_menu()
+            )
     
 
     except MessageNotModified:
@@ -698,7 +734,7 @@ async def filtering_data(client, query: CallbackQuery):
     user_qual = user_data[int(req)]['QUALITY'] if int(req) in user_data and 'QUALITY' in user_data[int(req)] else None
     user_imdb = user_data[int(req)]['IMDB'] if int(req) in user_data and 'IMDB' in user_data[int(req)] else None
     user_file_type = user_data[int(req)]['FILE_TYPE'] if int(req) in user_data and 'FILE_TYPE' in user_data[int(req)] else None
-
+    results_files = []
     button_maker = ButtonMaker()
 
     if data_parts[1] == 'page':
@@ -755,13 +791,22 @@ async def filtering_data(client, query: CallbackQuery):
         current_page = 1  # Default to page 1
         button_maker.callback("🕵 ꜰɪʟᴛᴇʀɪɴɢ ᴅᴀᴛᴀ 🕵", f"fd#page#{key}#{current_page}#{req}", position="body")
 
-        # Creating buttons for each file
-        for file in files:
-            button_maker.callback(
-                text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
-                callback_data=f'{pre}#{file.file_id}#{req}',
-                position="files"
-            )
+        if config_dict['RESULT_TYPE'] == 'BUTTON':
+            # Creating buttons for each file
+            for file in files:
+                button_maker.callback(
+                    text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
+                    callback_data=f'{pre}#{file.file_id}#{req}',
+                    position="files"
+                )
+        elif config_dict['RESULT_TYPE'] == 'TEXT':
+            results_files = []
+            i = 1
+            for file in files:
+                ifile = f"{i}. [{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}"
+                mfile = f"<a href='https://t.me/{bot_name}?start={pre}_{file.file_id}'>{ifile}</a>"
+                results_files.append(mfile)
+                i += 1
 
         # Page navigation buttons
         if total_results > 0:
@@ -800,9 +845,14 @@ async def filtering_data(client, query: CallbackQuery):
 
     # Edit the message with updated buttons
     try:
-        if keyboard:
+        if keyboard and not results_files:
             await editReplyMarkup(query.message, reply_markup=keyboard)
-            await asyncio.sleep(0.5)
+        elif keyboard and results_files:
+            await edit_message(
+                query.message,
+                text=text_result_handler[key] + '\n\n' + '\n\n'.join(results_files) if key in text_result_handler else 'Here are your results' + '\n\n' + '\n\n'.join(results_files),
+                buttons=keyboard
+            )
         else:
             return
     except MessageNotModified:
@@ -996,6 +1046,7 @@ async def filter_next_page(client, query):
         filtered_files = [file for file in files if file.file_year == year]
     ##############################################################################
     button_maker = ButtonMaker()
+    results_files = []
 
     # Header section with Premium and Send All buttons
     if config_dict['MAIN_CHNL_USRNM']:
@@ -1013,14 +1064,22 @@ async def filter_next_page(client, query):
     elif data[-1] == 'yn':
         button_maker.callback("YEAR FILTERS FILES", "year_filters", position="body")
 
-    # Add filtered file buttons
-    for file in filtered_files:
-        # Check if file_size is a dictionary or an integer
-        button_maker.callback(
-            text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
-            callback_data=f'{pre}#{file.file_id}#{req}',
-            position="files"
-        )
+    if config_dict['RESULT_TYPE'] == 'BUTTON':
+        # Creating buttons for each file
+        for file in files:
+            button_maker.callback(
+                text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
+                callback_data=f'{pre}#{file.file_id}#{req}',
+                position="files"
+            )
+    elif config_dict['RESULT_TYPE'] == 'TEXT':
+        results_files = []
+        i = 1 if offset == 0 else offset + 1
+        for file in files:
+            ifile = f"{i}. [{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}"
+            mfile = f"<a href='https://t.me/{bot_name}?start={pre}_{file.file_id}'>{ifile}</a>"
+            results_files.append(mfile)
+            i += 1
 
     # Page navigation buttons
     if 0 < offset <= 10:
@@ -1045,10 +1104,17 @@ async def filter_next_page(client, query):
     button_maker.callback("🏠 ʜᴏᴍᴇ", f"fd#home#{key}#{req}", position="footer")
     button_maker.callback("❌ ᴄʟᴏꜱᴇ", f"fd#close#{key}#{req}", position="footer")
     try:
-        await editReplyMarkup(
-            query.message,
-            reply_markup=button_maker.build_filter_menu()
-        )
+        if not results_files and config_dict['RESULT_TYPE'] == 'BUTTON':
+            await editReplyMarkup(
+                query.message,
+                reply_markup=button_maker.build_filter_menu()
+            )
+        elif results_files and config_dict['RESULT_TYPE'] == 'TEXT':
+            await edit_message(
+                query.message,
+                text=text_result_handler[key] + '\n\n' + '\n\n'.join(results_files) if key in text_result_handler else 'Here are your results' + '\n\n' + '\n\n'.join(results_files),
+                buttons=button_maker.build_filter_menu()
+            )
         await asyncio.sleep(0.5)
     except MessageNotModified:
         pass
@@ -1218,14 +1284,22 @@ async def general_selected(client, query: CallbackQuery):
         button_maker.callback("EPISODE FILTERS FILES", "episode_filters", position="body")
 
     if total_count_filtered_files != 0:
-        # Add filtered file buttons
-        for file in filtered_files:
-            # Check if file_size is a dictionary or an integer
-            button_maker.callback(
-                text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
-                callback_data=f'{pre}#{file.file_id}#{req}',
-                position="files"
-            )
+        if config_dict['RESULT_TYPE'] == 'BUTTON':
+            # Creating buttons for each file
+            for file in files:
+                button_maker.callback(
+                    text=f"[{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}",
+                    callback_data=f'{pre}#{file.file_id}#{req}',
+                    position="files"
+                )
+        elif config_dict['RESULT_TYPE'] == 'TEXT':
+            results_files = []
+            i = 1
+            for file in files:
+                ifile = f"{i}. [{get_size(file.file_size)}] {' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@') and not x.startswith('www.'), file.file_name.split()))}"
+                mfile = f"<a href='https://t.me/{bot_name}?start={pre}_{file.file_id}'>{ifile}</a>"
+                results_files.append(mfile)
+                i += 1
 
         # Page navigation buttons
         if total_count_filtered_files > 0:
@@ -1427,7 +1501,7 @@ bot.add_handler(
     CallbackQueryHandler(auto_filter_file_sender, filters=filters.regex("^(file|resendfile)"))
 )
 bot.add_handler(
-    CallbackQueryHandler(filtering_data, filters=filters.regex("^fd"))
+    CallbackQueryHandler(filtering_data, filters=filters.regex("fd"))
 )
 bot.add_handler(
     CallbackQueryHandler(advantage_spoll_choker, filters=filters.regex("^spol"))

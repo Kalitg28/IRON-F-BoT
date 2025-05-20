@@ -27,6 +27,7 @@ bot_start_time = time()
 # Global variable
 user_data = {}
 handler_dict = {}
+text_result_handler = {}
 broadcast_handler_dict = {}
 user_handler_dict = {}
 deldbfiles_handler_dict = {}
@@ -247,6 +248,10 @@ if len(USER_SESSION_STRING) != 0:
         log_error(f"Failed making client from USER_SESSION_STRING : {e}")
         user_bot = ''
 
+RESULT_TYPE  = environ.get("RESULT_TYPE", "") # set between TEXT or BUTTON
+if len(RESULT_TYPE) == 0:                     # recommend to set from bot settings not here
+    RESULT_TYPE = 'BUTTON'
+
 FSUB_IDS = environ.get('FSUB_IDS', '')
 if len(FSUB_IDS) == 0:
     FSUB_IDS = ''
@@ -259,6 +264,20 @@ MAIN_CHNL_USRNM = environ.get("MAIN_CHNL_USRNM", "") # your main channel usernam
 if MAIN_CHNL_USRNM == 0:
     LOGGER.warning("Update MAIN_CHNL_USRNM Variable")
     MAIN_CHNL_USRNM = 'HUB4VF'
+
+POST_UPDATE_CHANNEL_ID = environ.get('POST_UPDATE_CHANNEL_ID', '-1001699673018') #channel id
+if len(POST_UPDATE_CHANNEL_ID) == 0:
+    POST_UPDATE_CHANNEL_ID = ''
+else:
+    POST_UPDATE_CHANNEL_ID = int(POST_UPDATE_CHANNEL_ID)
+
+POST_CUSTOM_TEMPLATE = environ.get('POST_CUSTOM_TEMPLATE', '') # if you want to set custom template for post
+if len(POST_CUSTOM_TEMPLATE) == 0:
+    POST_CUSTOM_TEMPLATE = IRON_POST_CUSTOM_TEMPLATE
+
+POST_HWTO_DOWNLOAD_URL = environ.get('POST_HWTO_DOWNLOAD_URL', '') # if you want to set custom template for post
+if len(POST_HWTO_DOWNLOAD_URL) == 0:
+    POST_HWTO_DOWNLOAD_URL = 'https://t.me/xxxxx'
 
 UPDT_BTN_URL = environ.get('UPDT_BTN_URL', '') #if you set url then bot will add update button with file else no button generate
 
@@ -317,6 +336,9 @@ REQ_JOIN_FSUB = REQ_JOIN_FSUB.lower() == 'true'
 
 FILE_SECURE_MODE = environ.get("FILE_SECURE_MODE", "False")
 FILE_SECURE_MODE = FILE_SECURE_MODE.lower() == 'true'
+
+POST_IMG_ENABLED = environ.get("POST_IMG_ENABLED", "True")
+POST_IMG_ENABLED = POST_IMG_ENABLED.lower() == 'true'
 ############################################################
             # Bool Vlaues
 ############################################################
@@ -530,8 +552,13 @@ config_dict = {
     'OWNER_ID': OWNER_ID,
     'OWNER_CONTACT_LNK': OWNER_CONTACT_LNK,
     'PORT': PORT,
+    'POST_UPDATE_CHANNEL_ID': POST_UPDATE_CHANNEL_ID,
+    'POST_CUSTOM_TEMPLATE': POST_CUSTOM_TEMPLATE,
+    'POST_HWTO_DOWNLOAD_URL': POST_HWTO_DOWNLOAD_URL,
+    'POST_IMG_ENABLED': POST_IMG_ENABLED,
     'REPO_URL': REPO_URL,
     'RESULT_TEXT': RESULT_TEXT,
+    'RESULT_TYPE': RESULT_TYPE,
     'REQ_JOIN_FSUB': REQ_JOIN_FSUB,
     'SET_COMMANDS': SET_COMMANDS,
     'SHORT_URL_API': SHORT_URL_API,

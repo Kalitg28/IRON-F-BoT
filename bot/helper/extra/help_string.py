@@ -31,6 +31,10 @@ IRON_IMDB_TEMPLATE_TXT = """
 📩 <b>Requested By:</b> {message.from_user.mention}
 """
 
+IRON_POST_CUSTOM_TEMPLATE = """
+#New_File_Added ✅\n\nFile_Name:- <code>{file_name}</code>\n\nLanguage:- {language}\n\nQuality:- {quality}
+"""
+
 IRON_ALRT_TXT = """
 🚫 𝗪𝗔𝗥𝗡𝗜𝗡𝗚 🚫  
 📌 Hey {}, Check your own request!  

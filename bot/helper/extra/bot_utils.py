@@ -24,6 +24,7 @@ from .shorteners import short_url
 THREADPOOL = ThreadPoolExecutor(max_workers=1000)
 SIZE_UNITS = ["B", "KB", "MB", "GB", "TB", "PB"]
 STATUS_START = 0
+db = DbManager()
 
 def list_to_str(k):
     if not k:
@@ -358,7 +359,7 @@ async def checking_access(user_id, button=None):
     user_data.setdefault(user_id, {})
     data = user_data[user_id]
     if DATABASE_URL:
-        data["time"] = await DbManager().get_token_expiry(user_id)
+        data["time"] = await db.get_token_expiry(user_id)
     expire = data.get("time")
     is_expired = (
         expire is None or expire is not None and (time() - expire) > token_timeout
@@ -369,7 +370,7 @@ async def checking_access(user_id, button=None):
             del data["time"]
         data["token"] = token
         if DATABASE_URL:
-            await DbManager().update_user_token(user_id, token)
+            await db.update_user_token(user_id, token)
         user_data[user_id].update(data)
         time_str = get_readable_time(token_timeout, True)
         if button is None:

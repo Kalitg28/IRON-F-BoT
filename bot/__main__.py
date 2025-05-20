@@ -70,7 +70,7 @@ from bot.plugins import (
     listerner,
     file_bin_channel
 )
-from bot.plugins.autofilter import on_start_cmd_senfiles_handler
+from bot.plugins.autofilter import auto_filter, on_start_cmd_senfiles_handler
 
 help_string = f"""<b>NOTE: Try each command without any arguments to see more details.</b>
 
@@ -223,6 +223,12 @@ async def start(client, message):
             await send_message(message, f"You are not registered due to: {e}")
     elif len(message.command) == 2 and message.command[1].startswith('sendfiles'):
         await on_start_cmd_senfiles_handler(client, message)
+    elif len(message.command) == 2 and message.command[1].startswith('getfile'):
+        searches = message.command[1].split("-", 1)[1] 
+        search = searches.replace('-',' ')
+        message.text = search 
+        await auto_filter(client, message) 
+        return
     elif await CustomFilters.authorized(client, message):
         await authorize_user_start_cmd(client, message)
     else:
@@ -311,7 +317,7 @@ async def main():
         cleanup_downloads(),
         restart_notification(),
         set_commands(bot),
-        chnl_check(LOG_CHNL=True, FSUB=True),
+        chnl_check(LOG_CHNL=True, FSUB=True, channel_id=config_dict['POST_UPDATE_CHANNEL_ID']),
         telegraph.create_account()
     )
     global HOSTING_SERVER

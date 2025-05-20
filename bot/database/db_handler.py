@@ -14,6 +14,8 @@ from bot import (
     config_dict,
 )
 
+IS_SEND_MOVIE_UPDATE = bool(True)
+
 
 class DbManager:
     def __init__(self):
@@ -21,7 +23,7 @@ class DbManager:
         self.__db = None
         self.__conn = None
         self.__connect()
-
+        
     def __connect(self):
         try:
             self.__conn = AsyncIOMotorClient(DATABASE_URL)
@@ -362,6 +364,8 @@ class DbManager:
             return False
         
     async def get_all_chats(self, chnl=False, grp=False):
+        if self.__err:
+            return
         query = {}
         if chnl:
             query["chat_type"] = "CHANNEL"

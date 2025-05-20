@@ -69,7 +69,8 @@ bool_vars = [
     "REQ_JOIN_FSUB",
     "AUTO_FILE_DELETE_MODE",
     "IMDB_RESULT",
-    "FILE_SECURE_MODE"
+    "FILE_SECURE_MODE",
+    'POST_IMG_ENABLED'
 ]
 
 digit_vars = [
@@ -79,7 +80,9 @@ digit_vars = [
     "OWNER_ID",
     "FILE_BIN_CHANNEL",
     "TELEGRAM_API",
-    "PORT"
+    "PORT",
+    "POST_UPDATE_CHANNEL_ID",
+    'TOKEN_TIMEOUT'
 ]
 
 dev_vars = [
@@ -144,6 +147,8 @@ bset_display_dict = {
     "AUTO_DEL_FILTER_RESULT_MSG_TIMEOUT": "This is the auto delete filter result message timeout. This help you to set the auto delete filter result message after given seconds.\n\nExample: <code>300</code>.\n\n⚠️ NOTE: This will not work if you not setted the AUTO_DEL_FILTER_RESULT_MSG variable True.",
     "TOKEN_TIMEOUT": "This is the token timeout. This help you to set the token timeout after given seconds.\n\nExample: <code>300</code>.\n\n⚠️ NOTE: This will not work if you not setted the SHORT_URL_API variable.",
     "FILE_BIN_CHANNEL": f"Bin channel id, By using this channel, you can remove many unwanted files from mongodb database.\n\nfor get channel id, forward any message from your channel with forwared tag to this bot and reply to that message with /{BotCommands.GetIDCommand} and get your channel id.\n\nExample: <code>-1001234567890</code>\n\n⚠️ NOTE: Make sure bot is admin in this channel with full rights. Also don't add multiple ids here otherwise this will not work.",    
+    "POST_UPDATE_CHANNEL_ID": f"Your post update channel id, where you get all updates.\n\nfor get channel id, forward any message from your channel with forwared tag to this bot and reply to that message with /{BotCommands.GetIDCommand} and get your channel id.\n\nExample: <code>-1001234567890</code>\n\n⚠️ NOTE: Make sure bot is admin in this channel with full rights.",
+    "POST_CUSTOM_TEMPLATE": "set custom template for your post update channel as you like, you can use this below keys in your template\n\nKeys:\n<code>{file_name}</code>\n<code>{language}</code>\n<code>{quality}</code>\n<code>{distributors}</code>\n<code>{release_date}</code>\n<code>{rating}</code>\n<code>{genres}</code>\n<code>{year}</code>"
 }
 
 async def get_buttons(key=None, edit_type=None, edit_mode=None, mess=None):
@@ -173,12 +178,12 @@ async def get_buttons(key=None, edit_type=None, edit_mode=None, mess=None):
         msg += f'<b>Description:</b> {bset_display_dict.get(key, "No Description Provided")}\n\n'
         if mess.chat.type == ChatType.PRIVATE:
             msg += f'<b>Value:</b> <code>{config_dict.get(key, "None")}</code>\n\n'
-        elif key not in bool_vars:
+        elif key not in bool_vars and key not in 'RESULT_TYPE':
             buttons.callback(
                 "View value", f"botset showvar {key}", position="header"
             )
         buttons.callback("Back", "botset back var", position="footer")
-        if key not in bool_vars and key not in dev_vars:
+        if key not in bool_vars and key not in dev_vars and key != 'RESULT_TYPE':
             if not edit_mode:
                 buttons.callback("Edit Value", f"botset editvar {key} edit")
             else:
@@ -186,6 +191,7 @@ async def get_buttons(key=None, edit_type=None, edit_mode=None, mess=None):
         if (
             key not in dev_vars
             and key not in bool_vars
+            and key not in 'RESULT_TYPE'
         ):
             buttons.callback("Reset", f"botset resetvar {key}")
         buttons.callback("Close", "botset close", position="footer")
@@ -205,7 +211,7 @@ async def get_buttons(key=None, edit_type=None, edit_mode=None, mess=None):
             "SUDO_USERS",
         ]:
             msg += "⚠️ <b>Note:</b> Restart required for this edit to take effect!\n\n"
-        if edit_mode and key not in bool_vars:
+        if edit_mode and key not in bool_vars and key != 'RESULT_TYPE':
             msg += "Send a valid value for the above Var. <b>Timeout:</b> 60 sec"
         if key in bool_vars:
             if not config_dict.get(key):
@@ -214,6 +220,11 @@ async def get_buttons(key=None, edit_type=None, edit_mode=None, mess=None):
                 buttons.callback("Make it False", f"botset boolvar {key} off")
         if key in dev_vars:
             msg += "<b>Note:</b> Sorry but you are not able to change this var, my developer still working on it, so wait for update.\n\n"
+        if key == 'RESULT_TYPE':
+            if config_dict.get(key) == 'BUTTON':
+                buttons.callback("Make it text", f"botset boolvar {key} on")
+            else:
+                buttons.callback("Make it button", f"botset boolvar {key} off")
     button = buttons.column(1) if key is None else buttons.column(2)
     return msg, button
 
@@ -263,10 +274,9 @@ async def update_variable(message):
                             return
                         else:
                             LOGGER.info(f"Successfully connected to {url}")
-                elif key in ['DATABASE_CHANNEL', 'FSUB_IDS', 'LOG_CHANNEL', 'FILE_BIN_CHANNEL']:
+                elif key in ['DATABASE_CHANNEL', 'FSUB_IDS', 'LOG_CHANNEL', 'FILE_BIN_CHANNEL', 'POST_UPDATE_CHANNEL_ID']:
                     try:
                         chnl = await chnl_check(channel_id=value)
-                        print(chnl)
                         i_list = []
                         for c, v in chnl.items():
                             if not v:
@@ -329,15 +339,24 @@ async def edit_bot_settings(client, query):
             await DbManager().update_config({data[2]: value})
     elif data[1] == "boolvar":
         handler_dict[message.chat.id] = False
-        value = data[3] == "on"
-        await query.answer(
-            f"Successfully variable	 changed to {value}!", show_alert=True
-        )
-        print(f"value: {value}{type(value)}")
+        if data[2] in bool_vars:
+            value = data[3] == "on"
+            await query.answer(
+                f"Successfully variable	 changed to {value}!", show_alert=True
+            )  
+        else:
+            if data[3] == 'on':
+                value = 'TEXT'
+            else:
+                value = 'BUTTON'
+            await query.answer(
+                f"Successfully variable	 changed to {value}!", show_alert=True
+            )
         config_dict[data[2]] = value
         await update_buttons(message, data[2], "editvar", False)
         if DATABASE_URL:
             await DbManager().update_config({data[2]: value})
+            
     elif data[1] == "editvar":
         handler_dict[message.chat.id] = False
         edit_mode = len(data) == 4

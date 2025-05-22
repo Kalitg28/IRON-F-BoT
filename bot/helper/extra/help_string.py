@@ -1,5 +1,5 @@
 IRON_START_TEXT = """
-💎 ʜᴇʏ {}{}, ᴡᴇʟᴄᴏᴍᴇ! 👋\n
+💎 ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ!👋 𝗠𝗼𝘃𝗶𝗲 𝗙𝗶𝗹𝘁𝗲𝗿𝘀 𝗕𝗼𝘁\n
 🔍 ɪ ᴀᴍ ʜᴇʀᴇ ᴛᴏ ᴍᴀᴋᴇ ꜰɪʟᴇ ꜱᴇᴀʀᴄʜɪɴɢ ᴇꜰꜰᴏʀᴛʟᴇꜱꜱ ᴀɴᴅ ꜱᴍᴏᴏᴛʜ. \n
 🎯 <b>ᴡʜʏ ᴄʜᴏᴏꜱᴇ ᴍᴇ?</b>
    ✅ ɪɴꜱᴛᴀɴᴛ ꜰɪʟᴇ ꜱᴇᴀʀᴄʜ 🔎  
@@ -7,12 +7,12 @@ IRON_START_TEXT = """
    ✅ ꜱᴜᴘᴇʀ ꜰᴀꜱᴛ ʀᴇꜱᴘᴏɴꜱᴇ 🔄  
    ✅ ᴅᴇꜰᴀᴜʟᴛ ꜰɪʟᴛᴇʀɪɴɢ ᴏᴘᴛɪᴏɴꜱ 📂\n
 💡 ᴛʏᴘᴇ ʏᴏᴜʀ ꜱᴇᴀʀᴄʜ ᴋᴇʏᴡᴏʀᴅꜱ ᴀɴᴅ ʟᴇᴛ ᴍᴇ ᴅᴏ ᴛʜᴇ ʀᴇꜱᴛ! 🚀\n
-🔹 <b>ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ :</b> <a href='https://t.me/HUB4VF'>HUB4VF</a>
+🔹 <b>ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ :</b> <a href='https://t.me/Indian_MV'>🇮🇳𝐈𝐧𝐝𝐢𝐚𝐧 𝐌𝐕🇮🇳</a>
 """
 
 IRON_RESULT_TEXT = """✨ 𝒀𝒐𝒖𝒓 𝒔𝒆𝒂𝒓𝒄𝒉 𝒊𝒔 𝒅𝒐𝒏𝒆! 𝑯𝒆𝒓𝒆'𝒔 𝒘𝒉𝒂𝒕 𝑰 𝒇𝒐𝒖𝒏𝒅 🔍\n📌 𝒀𝒐𝒖 𝒔𝒆𝒂𝒓𝒄𝒉𝒆𝒅 𝒇𝒐𝒓: {query}\n👤 𝒀𝒐𝒖𝒓 𝒏𝒂𝒎𝒆: {user_mention}\n📊 𝑻𝒐𝒕𝒂𝒍 𝒓𝒆𝒔𝒖𝒍𝒕𝒔: {query_total_results}"""
 
-IRON_CUSTOM_FILE_CAPTION = """<b>• {file_name}\n\n• ᴘᴏᴡᴇʀᴇᴅ ʙʏ : <a href="https://t.me/HUB4VF">HUB4VF</a></b>"""
+IRON_CUSTOM_FILE_CAPTION = """<b>• {file_name}\n\n<blockquote>🌹 𝐏𝐨𝐰𝐞𝐫𝐞𝐝 𝐛𝐲 ›› <a href="https://t.me/Indian_MV">🇮🇳 𝐈𝐧𝐝𝐢𝐚𝐧 𝐌𝐕 🇮🇳</a></blockquote></b>"""
 
 IRON_IMDB_TEMPLATE_TXT = """
 <b>🎬 Query: {query}</b>
@@ -44,8 +44,8 @@ IRON_ALRT_TXT = """
 IRON_ABOUT_TEXT = """
 
 ╔═━━━◥◣◆◢◤━━━═╗  
-║ 🤖 <b>BOT:</b> IRON-FILTER-BOT  
-║ 👨‍💻 <b>DEV:</b> <a href='https://t.me/LazyIron'>Iron Man</a> | <a href='https://t.me/Princerxyz'>Prince Ahir</a>  
+║ 🤖 <b>BOT:</b> 𝗠𝗼𝘃𝗶𝗲 𝗙𝗶𝗹𝘁𝗲𝗿𝘀 𝗕𝗼𝘁  
+║ 👨‍💻 <b>DEV:</b> <a href='https://t.me/Indian_MV_Admin_Bot'>༄㉿ᴬℓ𝓲࿐</a>   
 ║ 📚 <b>LIB:</b> ᴘʏʀᴏɢʀᴀᴍ  
 ║ 🐍 <b>LANGUAGE:</b> ᴘʏᴛʜᴏɴ  
 ║ 🗄 <b>DATABASE:</b> ᴍᴏɴɢᴏᴅʙ  
@@ -95,16 +95,20 @@ IRON_MOV_NT_FND = """
 """
 
 IRON_DISCLAIMER_TXT = """
-<b>ᴛʜɪꜱ ɪꜱ ᴀɴ ᴏᴘᴇɴ ꜱᴏᴜʀᴄᴇ ᴘʀᴏᴊᴇᴄᴛ.\n
-ᴀʟʟ ᴛʜᴇ ꜰɪʟᴇꜱ ɪɴ ᴛʜɪꜱ ʙᴏᴛ ᴀʀᴇ ꜰʀᴇᴇʟʏ ᴀᴠᴀɪʟᴀʙʟᴇ ᴏɴ ᴛʜᴇ ɪɴᴛᴇʀɴᴇᴛ ᴏʀ ᴘᴏꜱᴛᴇᴅ ʙʏ ꜱᴏᴍᴇʙᴏᴅʏ ᴇʟꜱᴇ. ᴊᴜꜱᴛ ꜰᴏʀ ᴇᴀꜱʏ ꜱᴇᴀʀᴄʜɪɴɢ ᴛʜɪꜱ ʙᴏᴛ ɪꜱ ɪɴᴅᴇxɪɴɢ ꜰɪʟᴇꜱ ᴡʜɪᴄʜ ᴀʀᴇ ᴀʟʀᴇᴀᴅʏ ᴜᴘʟᴏᴀᴅᴇᴅ ᴏɴ ᴛᴇʟᴇɢʀᴀᴍ. ᴡᴇ ʀᴇꜱᴘᴇᴄᴛ ᴀʟʟ ᴛʜᴇ ᴄᴏᴘʏʀɪɢʜᴛ ʟᴀᴡꜱ ᴀɴᴅ ᴡᴏʀᴋꜱ ɪɴ ᴄᴏᴍᴘʟɪᴀɴᴄᴇ ᴡɪᴛʜ ᴅᴍᴄᴀ ᴀɴᴅ ᴇᴜᴄᴅ. ɪꜰ ᴀɴʏᴛʜɪɴɢ ɪꜱ ᴀɢᴀɪɴꜱᴛ ʟᴀᴡ ᴘʟᴇᴀꜱᴇ ᴄᴏɴᴛᴀᴄᴛ ᴍᴇ ꜱᴏ ᴛʜᴀᴛ ɪᴛ ᴄᴀɴ ʙᴇ ʀᴇᴍᴏᴠᴇᴅ ᴀꜱᴀᴘ. ɪᴛ ɪꜱ ꜰᴏʀʙɪʙʙᴇɴ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ, ꜱᴛʀᴇᴀᴍ, ʀᴇᴘʀᴏᴅᴜᴄᴇ, ꜱʜᴀʀᴇ ᴏʀ ᴄᴏɴꜱᴜᴍᴇ ᴄᴏɴᴛᴇɴᴛ ᴡɪᴛʜᴏᴜᴛ ᴇxᴘʟɪᴄɪᴛ ᴘᴇʀᴍɪꜱꜱɪᴏɴ ꜰʀᴏᴍ ᴛʜᴇ ᴄᴏɴᴛᴇɴᴛ ᴄʀᴇᴀᴛᴏʀ ᴏʀ ʟᴇɢᴀʟ ᴄᴏᴘʏʀɪɢʜᴛ ʜᴏʟᴅᴇʀ. ɪꜰ ʏᴏᴜ ʙᴇʟɪᴇᴠᴇ ᴛʜɪꜱ ʙᴏᴛ ɪꜱ ᴠɪᴏʟᴀᴛɪɴɢ ʏᴏᴜʀ ɪɴᴛᴇʟʟᴇᴄᴛᴜᴀʟ ᴘʀᴏᴘᴇʀᴛʏ, ᴄᴏɴᴛᴀᴄᴛ ᴛʜᴇ ʀᴇꜱᴘᴇᴄᴛɪᴠᴇ ᴄʜᴀɴɴᴇʟꜱ ꜰᴏʀ ʀᴇᴍᴏᴠᴀʟ. ᴛʜᴇ ʙᴏᴛ ᴅᴏᴇꜱ ɴᴏᴛ ᴏᴡɴ ᴀɴʏ ᴏꜰ ᴛʜᴇꜱᴇ ᴄᴏɴᴛᴇɴᴛꜱ, ɪᴛ ᴏɴʟʏ ɪɴᴅᴇx ᴛʜᴇ ꜰɪʟᴇꜱ ꜰʀᴏᴍ ᴛᴇʟᴇɢʀᴀᴍ.</b>\n
-<blockquote>🌿 ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : <a href='https://t.me/BOT_UPDATE_HUB4VF'>HUB4VF BOT</a></blockquote>"""
+<blockquote>┏━•❃𓊈𒆜Oᴡɴᴇʀ Dᴇᴛᴀɪʟꜱ𒆜𓊉❃•━┓   
+◈ ᴛɢ ɴᴀᴍᴇ : ༄㉿ᴬℓ𝓲࿐
+◈ ᴜꜱᴇʀɴᴀᴍᴇ : @Indian_MV_Admin_Bot
+◈ ᴘᴇʀᴍᴀɴᴇɴᴛ ᴅᴍ ʟɪɴᴋ : <a href="https://t.me/Indian_MV_Admin_Bot">ᴄʟɪᴄᴋ ʜᴇʀᴇ</a>
+‿︵‿︵‿︵‿୨❤୧‿︵‿︵‿︵‿</blockquote>"""
 
 IRON_SOURCE_TXT = """
-<b>💡 Wanna Peek Inside?</b>  
-👀 **Source Code Available Here:**  
-<blockquote>🎯 <a href="https://t.me/BOT_UPDATE_HUB4VF">HUB4VF BOT</a></blockquote>  
-
-⚙️ **Crafted By**: <a href='https://t.me/LazyIron'>𝗜𝗥𝗢𝗡 𝗠𝗔𝗡 🦾 </a>
+<b> 
+<blockquote>┏━•❃𓊈𒆜Oᴡɴᴇʀ Dᴇᴛᴀɪʟꜱ𒆜𓊉❃•━┓   
+◈ ᴛɢ ɴᴀᴍᴇ : ༄㉿ᴬℓ𝓲࿐
+◈ ᴜꜱᴇʀɴᴀᴍᴇ : @Indian_MV_Admin_Bot
+◈ ᴘᴇʀᴍᴀɴᴇɴᴛ ᴅᴍ ʟɪɴᴋ : <a href="https://t.me/Indian_MV_Admin_Bot">ᴄʟɪᴄᴋ ʜᴇʀᴇ</a>
+‿︵‿︵‿︵‿୨❤୧‿︵‿︵‿︵‿</blockquote>  
+</b>
 """ 
 
 IRON_HELP_TXT = """<b>ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʙᴜᴛᴛᴏɴꜱ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ᴅᴏᴄᴜᴍᴇɴᴛᴀᴛɪᴏɴ ᴀʙᴏᴜᴛ ꜱᴘᴇᴄɪꜰɪᴄ ᴍᴏᴅᴜʟᴇꜱ..</b>"""

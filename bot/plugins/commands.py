@@ -411,13 +411,13 @@ async def get_start_msg_buttons(key=None, query=None):
     text = None
     if key is None:
         text = config_dict['START_TEXT']
-        button_maker.add_button("⋆  🎀  𝒜ᴅᴅ 𝑀ᴇ 𝒯ᴏ 𝒴ᴏᴜʀ 𝒢ʀᴏᴜᴘ  🎀  ⋆", url=f"http://t.me/{bot_name}?startgroup=start")
+        button_maker.add_button("⋆ 💠 𝗔𝗗𝗗 𝗠𝗘 𝗧𝗢 𝗬𝗢𝗨𝗥 𝗚𝗥𝗢𝗨𝗣 💠 ⋆", url=f"http://t.me/{bot_name}?startgroup=start")
         # Add rows of callback data buttons
-        button_maker.add_row([("⚙️ Hᴇʟᴘ ⚙️", "sbthelp help"), ("💌 Aʙᴏᴜᴛ 💌", "sbthelp about")])
-        button_maker.add_button("😎 ꧁・┆✦ʚ FEATURES ɞ✦ ┆・꧂ 😎", "sbthelp futures")
+        button_maker.add_row([("⚙️ 𝗛𝗲𝗹𝗽 ⚙️", "sbthelp help"), ("🛟 𝗔𝗯𝗼𝘂𝘁 🛟", "sbthelp about")])
+        button_maker.add_button("✦ʚ 𝗙𝗘𝗔𝗧𝗨𝗥𝗘𝗦 ɞ✦", "sbthelp futures")
         if len(config_dict['MAIN_CHNL_USRNM']) != 0:
             button_maker.add_button("Visit Channel", url=f"https://t.me/{config_dict['MAIN_CHNL_USRNM']}")
-        button_maker.add_button('✘ • ᴄʟᴏsᴇ • ✘', callback_data='sbthelp close_data')
+        button_maker.add_button('✘ • 𝗖𝗹𝗼𝘀𝗲 • ✘', callback_data='sbthelp close_data')
     
     elif key == 'about':
         text = config_dict['ABOUT_TEXT']
@@ -449,7 +449,7 @@ async def get_start_msg_buttons(key=None, query=None):
         button_maker.add_row([('⋞ ʙᴀᴄᴋ', 'sbthelp about'), ('• ᴄʟᴏsᴇ •', 'sbthelp close_data')])
         text = config_dict['SOURCE_TXT'] if len(config_dict['SOURCE_TXT']) != 0 else 'None'
     elif key == 'mydevelopers':
-        text ="""🎯 𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫 𝐏𝐫𝐨𝐟𝐢𝐥𝐞\n\n👨‍💻 𝗡𝗮𝗺𝗲: <a href="https://t.me/LazyIron"> ʟᴀᴢʏɪʀᴏɴ </a>\n🐍 𝗦𝗸𝗶𝗹𝗹: ᴘʏᴛʜᴏɴ ᴅᴇᴠᴇʟᴏᴘᴇʀ\n📚 𝗟𝗲𝗮𝗿𝗻𝗶𝗻𝗴 𝗣𝗮𝘁𝗵: sᴇʟғ-ᴛᴀᴜɢʜᴛ — ɴᴏ ғᴏʀᴍᴀʟ ᴄᴏᴜʀsᴇs, ᴊᴜsᴛ ᴄᴏᴅᴇ ᴀɴᴅ ᴄᴜʀɪᴏsɪᴛʏ! 🚀\n\n📡 𝗖𝗵𝗮𝗻𝗻𝗲𝗹: <a href="https://t.me/BOT_UPDATE_HUB4VF"> ʜᴜʙ𝟺ᴠғ ʙᴏᴛ </a>\n🔧 𝗣𝗿𝗼𝗷𝗲𝗰𝘁𝘀: ʙᴏᴛ ᴅᴇᴠᴇʟᴏᴘᴍᴇɴᴛ, ᴀᴜᴛᴏᴍᴀᴛɪᴏɴ, ᴀɴᴅ ᴄʀᴇᴀᴛɪᴠᴇ ᴄᴏᴅɪɴɢ!\n\n💡 𝗧𝗲𝗰𝗵 𝗦𝘁𝗮𝗰𝗸: ᴘʏᴛʜᴏɴ (ᴍᴀɪɴ), ғʟᴀsᴋ & ғᴀsᴛᴀᴘɪ, ᴍᴏɴɢᴏᴅʙ & ᴅᴏᴄᴋᴇʀ\n\n✨ ᴄᴏᴅᴇ ʙʏ ᴘᴀssɪᴏɴ, ɴᴏᴛ ʙʏ ᴄʜᴏɪᴄᴇ — ʟᴇᴛ ᴛʜᴇ ʟɪɴᴇs sᴘᴇᴀᴋ! ✨"""
+        text ="""🎯 𝐃𝐞𝐯𝐞𝐥𝐨𝐩𝐞𝐫 𝐏𝐫𝐨𝐟𝐢𝐥𝐞\n\n👨‍💻 𝗡𝗮𝗺𝗲: <a href="https://t.me/Indian_MV_Admin_Bot"> ༄㉿ᴬℓ𝓲࿐ </a>\n🐍 𝗦𝗸𝗶𝗹𝗹: ᴘʏᴛʜᴏɴ ᴅᴇᴠᴇʟᴏᴘᴇʀ\n📚 𝗟𝗲𝗮𝗿𝗻𝗶𝗻𝗴 𝗣𝗮𝘁𝗵: sᴇʟғ-ᴛᴀᴜɢʜᴛ — ɴᴏ ғᴏʀᴍᴀʟ ᴄᴏᴜʀsᴇs, ᴊᴜsᴛ ᴄᴏᴅᴇ ᴀɴᴅ ᴄᴜʀɪᴏsɪᴛʏ! 🚀\n\n📡 𝗖𝗵𝗮𝗻𝗻𝗲𝗹: <a href="https://t.me/Indian_MV">🇮🇳 𝐈𝐧𝐝𝐢𝐚𝐧 𝐌𝐕 🇮🇳</a>\n🔧 𝗣𝗿𝗼𝗷𝗲𝗰𝘁𝘀: ʙᴏᴛ ᴅᴇᴠᴇʟᴏᴘᴍᴇɴᴛ, ᴀᴜᴛᴏᴍᴀᴛɪᴏɴ, ᴀɴᴅ ᴄʀᴇᴀᴛɪᴠᴇ ᴄᴏᴅɪɴɢ!\n\n💡 𝗧𝗲𝗰𝗵 𝗦𝘁𝗮𝗰𝗸: ᴘʏᴛʜᴏɴ (ᴍᴀɪɴ), ғʟᴀsᴋ & ғᴀsᴛᴀᴘɪ, ᴍᴏɴɢᴏᴅʙ & ᴅᴏᴄᴋᴇʀ\n\n✨ ᴄᴏᴅᴇ ʙʏ ᴘᴀssɪᴏɴ, ɴᴏᴛ ʙʏ ᴄʜᴏɪᴄᴇ — ʟᴇᴛ ᴛʜᴇ ʟɪɴᴇs sᴘᴇᴀᴋ! ✨"""
         button_maker.add_row([('⋞ ʙᴀᴄᴋ', 'sbthelp about'), ('• ᴄʟᴏsᴇ •', 'sbthelp close_data')])
     elif key == 'futures':
         text = config_dict['START_TEXT']

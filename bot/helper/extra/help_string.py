@@ -1,5 +1,5 @@
 IRON_START_TEXT = """
-💎 ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ!👋 𝗠𝗼𝘃𝗶𝗲 𝗙𝗶𝗹𝘁𝗲𝗿𝘀 𝗕𝗼𝘁\n
+💎 ʜᴇʏ {}, ᴡᴇʟᴄᴏᴍᴇ!👋 ProSearch X Bot\n
 🔍 ɪ ᴀᴍ ʜᴇʀᴇ ᴛᴏ ᴍᴀᴋᴇ ꜰɪʟᴇ ꜱᴇᴀʀᴄʜɪɴɢ ᴇꜰꜰᴏʀᴛʟᴇꜱꜱ ᴀɴᴅ ꜱᴍᴏᴏᴛʜ. \n
 🎯 <b>ᴡʜʏ ᴄʜᴏᴏꜱᴇ ᴍᴇ?</b>
    ✅ ɪɴꜱᴛᴀɴᴛ ꜰɪʟᴇ ꜱᴇᴀʀᴄʜ 🔎  
@@ -44,7 +44,7 @@ IRON_ALRT_TXT = """
 IRON_ABOUT_TEXT = """
 
 ╔═━━━◥◣◆◢◤━━━═╗  
-║ 🤖 <b>BOT:</b> 𝗠𝗼𝘃𝗶𝗲 𝗙𝗶𝗹𝘁𝗲𝗿𝘀 𝗕𝗼𝘁  
+║ 🤖 <b>BOT:</b> ProSearch X Bot  
 ║ 👨‍💻 <b>DEV:</b> <a href='https://t.me/Indian_MV_Admin_Bot'>༄㉿ᴬℓ𝓲࿐</a>   
 ║ 📚 <b>LIB:</b> ᴘʏʀᴏɢʀᴀᴍ  
 ║ 🐍 <b>LANGUAGE:</b> ᴘʏᴛʜᴏɴ  
@@ -153,7 +153,7 @@ BOT_SETTING_MANUAL = (
     "<b>🔧 Available Settings:</b>\n"
     "<b>1. Config Variables:</b> View and edit configuration variables.\n"
     "<b>2. Close:</b> Exit the settings menu.\n\n"
-    "For detailed information and images, visit: <spoiler><a href='https://justpaste.it/auizk'>Bot Settings Documentation.</a></spoiler>"
+    "For detailed information and images, visit: <spoiler><a href='https://t.me/Indian_MV_Admin_Bot'>Bot Settings Documentation.</a></spoiler>"
 )
 
 AUTO_FILTER_MANUAL = (
@@ -173,7 +173,7 @@ AUTO_FILTER_MANUAL = (
     "Simply type your query, and the bot will provide you with filtered results.\n"
     "Use the buttons to navigate through the options and select your preferences.\n\n"
     "<b>📖 For More Details:</b>\n"
-    "Check out the full guide here: <spoiler><a href='https://justpaste.it/j6zav'>Auto Filter Documentation.</a></spoiler>"
+    "Check out the full guide here: <spoiler><a href='https://t.me/Indian_MV_Admin_Bot'>Auto Filter Documentation.</a></spoiler>"
 )
 
 USER_SETTING_MANUAL = (
@@ -191,12 +191,12 @@ USER_SETTING_MANUAL = (
     "1. Seperate reset button for each setting\n"
     "2. Global reset button for all setting\n\n"
     "<b>📖 More Details:</b>"
-    "For assistance, refer to the <spoiler><a href='https://justpaste.it/es4l2'>User Setting Documentation.</a></spoiler>"
+    "For assistance, refer to the <spoiler><a href='https://t.me/Indian_MV_Admin_Bot'>User Setting Documentation.</a></spoiler>"
 )
 
 WEB_PAGE_MANUAL = (
     "<b>🌐 Web Feature Overview 🌐</b>\n\n"
-    "Welcome to the Web Feature of the IRON-FILTER-BOT!\n\n"
+    "Welcome to the Web Feature of the ProSearch X Bot!\n\n"
     "<b>📥 Overview:</b>\n"
     "- <b>Logs:</b> View the last 100 log entries.\n"
     "- <b>File Management:</b> Open specific files by entering their names.\n\n"
@@ -227,7 +227,7 @@ INDEX_FILE_MANUAL = (
     "2. <b>Select Options:</b> Choose whether to index all files or skip certain files.\n"
     "3. <b>Confirm:</b> Follow the prompts to confirm your choices.\n\n"
     "<b>📖 For More Details:</b>\n"
-    "<spoiler><a href='https://justpaste.it/44h6r'>Indexing Feature Documentation.</a></spoiler>"
+    "<spoiler><a href='https://t.me/Indian_MV_Admin_Bot'>Indexing Feature Documentation.</a></spoiler>"
 )
 #---------FEATURES CALLBACK----------#
 

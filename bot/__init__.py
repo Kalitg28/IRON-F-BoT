@@ -258,14 +258,14 @@ if len(FSUB_IDS) == 0:
 
 OWNER_CONTACT_LNK = environ.get("OWNER_CONTACT_LNK", "") #owner contact link for user
 if len(OWNER_CONTACT_LNK) == 0:
-    OWNER_CONTACT_LNK = "https://t.me/ContactownerHUB4VF_bot"
+    OWNER_CONTACT_LNK = "https://t.me/Indian_MV_Admin_Bot"
 
 MAIN_CHNL_USRNM = environ.get("MAIN_CHNL_USRNM", "") # your main channel username without @
 if MAIN_CHNL_USRNM == 0:
     LOGGER.warning("Update MAIN_CHNL_USRNM Variable")
     MAIN_CHNL_USRNM = 'HUB4VF'
 
-POST_UPDATE_CHANNEL_ID = environ.get('POST_UPDATE_CHANNEL_ID', '-1001699673018') #channel id
+POST_UPDATE_CHANNEL_ID = environ.get('POST_UPDATE_CHANNEL_ID', '-1002698964455') #channel id
 if len(POST_UPDATE_CHANNEL_ID) == 0:
     POST_UPDATE_CHANNEL_ID = ''
 else:
@@ -298,7 +298,7 @@ else:
 START_PICS = environ.get('START_PICS', '')
 if len(START_PICS) == 0:
     Warning("START_PICS Not Found, Using defult value")
-    START_PICS = "https://jpcdn.it/img/9c1078d5bb5ff7d526eae590db3d3d27.jpg"
+    START_PICS = "https://envs.sh/ste.jpg"
 
 SPELL_IMG = environ.get("SPELL_IMG", "")
 if len(SPELL_IMG) == 0:
